@@ -42,6 +42,3 @@ This will initiate the data loading, preprocessing, model training, and evaluati
 Configuration settings for S3 access and model parameters can be found in the following files:
 - `src/data/s3_config.py`: Contains the S3 bucket details and credentials.
 - `config/config.yaml`: Contains model parameters and data paths.
-
-## License
-This project is licensed under the MIT License. See the LICENSE file for more details.
