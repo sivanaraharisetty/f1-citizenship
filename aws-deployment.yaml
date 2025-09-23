@@ -1,0 +1,144 @@
+# AWS Deployment Configuration
+# Immigration Journey Analyzer - AWS Infrastructure
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Immigration Journey Analyzer - AWS Infrastructure'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: 'production'
+    AllowedValues: ['development', 'staging', 'production']
+  
+  InstanceType:
+    Type: String
+    Default: 'ml.m5.xlarge'
+    AllowedValues: ['ml.t3.medium', 'ml.m5.large', 'ml.m5.xlarge', 'ml.m5.2xlarge']
+  
+  ModelName:
+    Type: String
+    Default: 'immigration-journey-analyzer'
+  
+  S3BucketName:
+    Type: String
+    Description: 'S3 bucket for model artifacts and data'
+
+Resources:
+  # SageMaker Endpoint Configuration
+  SageMakerModel:
+    Type: AWS::SageMaker::Model
+    Properties:
+      ModelName: !Sub '${ModelName}-${Environment}'
+      PrimaryContainer:
+        Image: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/immigration-classifier:latest'
+        ModelDataUrl: !Sub 's3://${S3BucketName}/models/immigration-classifier.tar.gz'
+        Environment:
+          SAGEMAKER_PROGRAM: 'inference.py'
+          SAGEMAKER_SUBMIT_DIRECTORY: '/opt/ml/code'
+          SAGEMAKER_CONTAINER_LOG_LEVEL: '20'
+          SAGEMAKER_REGION: !Ref AWS::Region
+
+  # SageMaker Endpoint Configuration
+  SageMakerEndpointConfig:
+    Type: AWS::SageMaker::EndpointConfiguration
+    Properties:
+      EndpointConfigName: !Sub '${ModelName}-config-${Environment}'
+      ProductionVariants:
+        - ModelName: !Ref SageMakerModel
+          VariantName: 'primary'
+          InitialInstanceCount: 1
+          InstanceType: !Ref InstanceType
+          InitialVariantWeight: 1.0
+
+  # SageMaker Endpoint
+  SageMakerEndpoint:
+    Type: AWS::SageMaker::Endpoint
+    Properties:
+      EndpointName: !Sub '${ModelName}-endpoint-${Environment}'
+      EndpointConfigName: !Ref SageMakerEndpointConfig
+
+  # Lambda Function for API Gateway
+  ClassificationLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${ModelName}-lambda-${Environment}'
+      CodeUri: lambda/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Timeout: 30
+      MemorySize: 1024
+      Environment:
+        Variables:
+          SAGEMAKER_ENDPOINT: !Ref SageMakerEndpoint
+          AWS_REGION: !Ref AWS::Region
+      Policies:
+        - SageMakerInvokeEndpointPolicy:
+            EndpointName: !Ref SageMakerEndpoint
+
+  # API Gateway
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub '${ModelName}-api-${Environment}'
+      StageName: !Ref Environment
+      DefinitionBody:
+        openapi: '3.0.1'
+        info:
+          title: 'Immigration Journey Analyzer API'
+          version: '1.0.0'
+        paths:
+          /classify:
+            post:
+              x-amazon-apigateway-integration:
+                type: aws_proxy
+                httpMethod: POST
+                uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ClassificationLambda}/invocations'
+              responses:
+                '200':
+                  description: 'Classification successful'
+                '400':
+                  description: 'Bad request'
+                '500':
+                  description: 'Internal server error'
+
+  # CloudWatch Logs
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${ClassificationLambda}'
+      RetentionInDays: 30
+
+  # IAM Role for SageMaker
+  SageMakerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${ModelName}-sagemaker-role-${Environment}'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: sagemaker.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSageMakerFullAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+
+Outputs:
+  SageMakerEndpoint:
+    Description: 'SageMaker Endpoint URL'
+    Value: !Ref SageMakerEndpoint
+    Export:
+      Name: !Sub '${ModelName}-endpoint-${Environment}'
+  
+  ApiGatewayUrl:
+    Description: 'API Gateway URL'
+    Value: !Sub 'https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/${Environment}'
+    Export:
+      Name: !Sub '${ModelName}-api-url-${Environment}'
+  
+  LambdaFunction:
+    Description: 'Lambda Function ARN'
+    Value: !GetAtt ClassificationLambda.Arn
+    Export:
+      Name: !Sub '${ModelName}-lambda-${Environment}'
