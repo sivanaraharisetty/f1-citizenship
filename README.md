@@ -305,9 +305,6 @@ engagement = joined.groupby('id').agg({
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
@@ -320,6 +317,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **⚠️ Important**: This tool is for research and analysis purposes. Always comply with Reddit's API terms of service and respect user privacy.
 
-**📧 Contact**: [sivanaraharisetty@users.noreply.github.com](mailto:sivanaraharisetty@users.noreply.github.com)
 
 **🔗 Repository**: [https://github.com/sivanaraharisetty/f1-citizenship](https://github.com/sivanaraharisetty/f1-citizenship)
