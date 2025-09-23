@@ -1,4 +1,4 @@
-# 🎓 Immigration Journey Analyzer
+# Immigration Journey Analyzer
 
 > **An intelligent machine learning platform for analyzing immigration discussions across the international student life cycle from F1 visa to citizenship.**
 
@@ -7,25 +7,25 @@
 [![Transformers](https://img.shields.io/badge/Transformers-4.45+-green.svg)](https://huggingface.co/transformers)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## 🎯 Project Overview
+## Project Overview
 
 This project analyzes Reddit discussions to understand the international student immigration journey through 5 key stages:
 
-1. **🎓 Student Visa Stage** (F1, CPT, OPT, STEM OPT)
-2. **💼 Work Visa Stage** (H1B, Employer Sponsorship) 
-3. **🟢 Permanent Residency Stage** (PERM, I-140, Green Card)
-4. **🇺🇸 Citizenship Stage** (Naturalization)
-5. **⚖️ General Immigration & Legal Issues** (Cross-cutting)
+1. **Student Visa Stage** (F1, CPT, OPT, STEM OPT)
+2. **Work Visa Stage** (H1B, Employer Sponsorship) 
+3. **Permanent Residency Stage** (PERM, I-140, Green Card)
+4. **Citizenship Stage** (Naturalization)
+5. **General Immigration & Legal Issues** (Cross-cutting)
 
 ### Key Features
 
-- **🔄 Enterprise-Scale Processing**: Handles 2TB+ datasets with intelligent streaming
-- **🧠 Advanced AI**: BERT-based classification with early stopping & mixed precision
-- **📊 Real-time Intelligence**: ETA tracking, structured logging, progress persistence
-- **🛡️ Production-Grade**: Fault tolerance, resume capability, distributed processing
-- **📈 Comprehensive Analytics**: Per-stage metrics, journey mapping, engagement insights
+- **Enterprise-Scale Processing**: Handles 2TB+ datasets with intelligent streaming
+- **Advanced AI**: BERT-based classification with early stopping & mixed precision
+- **Real-time Intelligence**: ETA tracking, structured logging, progress persistence
+- **Production-Grade**: Fault tolerance, resume capability, distributed processing
+- **Comprehensive Analytics**: Per-stage metrics, journey mapping, engagement insights
 
-## 🏗️ Architecture
+## Architecture
 
 ```mermaid
 graph TB
@@ -41,7 +41,7 @@ graph TB
     J[Progress Intelligence] --> B
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -100,7 +100,7 @@ python -m src.main
 tail -f logs/classifier.log
 ```
 
-## 📊 Data Schema
+## Data Schema
 
 ### Input Data Structure
 
@@ -161,7 +161,7 @@ For enterprise-scale datasets, the platform provides intelligent ETA tracking:
 2025-09-23 09:25:15,234 INFO classifier - Finished chunk 0. Metrics: {'accuracy': 0.85, 'f1': 0.82}. Speed ~ 45.2 MB/s. ETA ~ 2h 15m
 ```
 
-## 📈 Results & Analytics
+## Results & Analytics
 
 ### Output Structure
 
@@ -201,7 +201,7 @@ df = pd.DataFrame(results)
 print(df[['chunk_index', 'metrics', 'num_rows']].head())
 ```
 
-## 🛠️ Development
+## Development
 
 ### Project Structure
 
@@ -251,7 +251,7 @@ print(result)
 "
 ```
 
-## 🔍 Research Applications
+## Research Applications
 
 ### Immigration Journey Analysis
 
@@ -282,7 +282,7 @@ engagement = joined.groupby('id').agg({
 }).reset_index()
 ```
 
-## 📚 References
+## References
 
 ### Official Immigration Resources
 
@@ -297,7 +297,7 @@ engagement = joined.groupby('id').agg({
 - Social media analysis methodologies
 - Natural language processing for legal text
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -306,7 +306,7 @@ engagement = joined.groupby('id').agg({
 5. Open a Pull Request
 
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Reddit communities for providing valuable discussion data
 - Hugging Face for the Transformers library
@@ -315,7 +315,6 @@ engagement = joined.groupby('id').agg({
 
 ---
 
-**⚠️ Important**: This platform is designed for research and analysis purposes. Always comply with Reddit's API terms of service and respect user privacy.
+**Important**: This platform is designed for research and analysis purposes. Always comply with Reddit's API terms of service and respect user privacy.
 
-
-**🔗 Repository**: [https://github.com/sivanaraharisetty/f1-citizenship](https://github.com/sivanaraharisetty/f1-citizenship)
+**Repository**: [https://github.com/sivanaraharisetty/f1-citizenship](https://github.com/sivanaraharisetty/f1-citizenship)
