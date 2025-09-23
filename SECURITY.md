@@ -14,7 +14,7 @@ We provide security updates for the following versions:
 If you discover a security vulnerability, please follow these steps:
 
 1. **DO NOT** create a public issue
-2. Email security concerns to: security@example.com
+2. Open a private security issue on GitHub
 3. Include as much detail as possible about the vulnerability
 4. Allow reasonable time for response before public disclosure
 
@@ -41,9 +41,5 @@ If you discover a security vulnerability, please follow these steps:
 - Regular security audits of the codebase
 - Secure handling of API keys and credentials
 - No hardcoded secrets in the codebase
-
-## Contact
-
-For security-related questions or to report vulnerabilities, please contact the security team at security@example.com.
 
 We take security seriously and appreciate your help in keeping the project secure.
