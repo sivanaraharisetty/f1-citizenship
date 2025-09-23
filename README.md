@@ -54,7 +54,7 @@ graph TB
 
 ```bash
 # Clone the repository
-git clone https://github.com/sivanaraharisetty/f1-citizenship.git
+git clone https://github.com/your-username/immigration-journey-analyzer.git
 cd f1-citizenship
 
 # Create virtual environment

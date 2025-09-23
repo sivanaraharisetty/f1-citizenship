@@ -57,7 +57,7 @@ def main():
 
     # --- Alert config (set your verified SES emails here) ---
     alert_sender = os.environ.get("ALERT_SENDER_EMAIL", "")
-    alert_recipient = os.environ.get("ALERT_RECIPIENT_EMAIL", "lahari.naraharisetty@austin.utexas.edu")
+    alert_recipient = os.environ.get("ALERT_RECIPIENT_EMAIL", "your-email@example.com")
     alert_region = os.environ.get("ALERT_AWS_REGION", "us-east-1")
 
     # --- Estimate total bytes remaining (for ETA) ---

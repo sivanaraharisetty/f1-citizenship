@@ -50,7 +50,7 @@ This will:
 ## Monitoring Your Progress Remotely
 
 ### Check GitHub Repository:
-- **URL**: https://github.com/sivanaraharisetty/f1-citizenship
+- **URL**: https://github.com/your-username/immigration-journey-analyzer
 - **Files to Watch**: 
   - `REALTIME_STATUS.md` (updated every 30 min)
   - `DASHBOARD.md` (executive summary)

@@ -176,7 +176,7 @@ gcloud compute ssh immigration-analyzer
 ## Remote Monitoring
 
 ### 1. GitHub Repository Monitoring
-- **URL**: https://github.com/sivanaraharisetty/f1-citizenship
+- **URL**: https://github.com/your-username/immigration-journey-analyzer
 - **Watch Files**: 
   - `REALTIME_STATUS.md` (updates every 30 min)
   - `DASHBOARD.md` (executive summary)
