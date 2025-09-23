@@ -144,7 +144,7 @@ Your repository will be automatically updated with:
 - Error logs and recovery
 - Completion status
 
-**Repository**: https://github.com/sivanaraharisetty/f1-citizenship
+**Repository**: https://github.com/your-username/immigration-journey-analyzer
 
 ---
 

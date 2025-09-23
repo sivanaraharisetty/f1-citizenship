@@ -113,7 +113,7 @@ def update_status_file():
 - **Script**: monitor_and_update.py
 - **Update Frequency**: Every 30 minutes
 - **Log File**: monitor.log
-- **Repository**: https://github.com/sivanaraharisetty/f1-citizenship
+- **Repository**: https://github.com/your-username/immigration-journey-analyzer
 
 ---
 *Auto-generated at {datetime.now().isoformat()}*

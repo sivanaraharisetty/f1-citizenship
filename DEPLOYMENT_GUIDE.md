@@ -22,7 +22,7 @@ This guide shows how to deploy and run the Immigration Journey Analyzer on any s
 
 ### 1. Clone Repository
 ```bash
-git clone https://github.com/sivanaraharisetty/f1-citizenship.git
+git clone https://github.com/your-username/immigration-journey-analyzer.git
 cd f1-citizenship
 ```
 
@@ -146,7 +146,7 @@ sudo apt update
 sudo apt install python3-pip git
 
 # Clone and setup
-git clone https://github.com/sivanaraharisetty/f1-citizenship.git
+git clone https://github.com/your-username/immigration-journey-analyzer.git
 cd f1-citizenship
 python3 -m venv .venv
 source .venv/bin/activate
@@ -441,6 +441,6 @@ echo "*/5 * * * * /path/to/health_check.sh" | crontab -
 
 ---
 
-**Repository**: https://github.com/sivanaraharisetty/f1-citizenship  
+**Repository**: https://github.com/your-username/immigration-journey-analyzer  
 **Support**: Check `AWAY_MODE_INSTRUCTIONS.md` for detailed monitoring  
 **Documentation**: All files are automatically updated every 30 minutes

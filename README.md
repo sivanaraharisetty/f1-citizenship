@@ -317,4 +317,4 @@ engagement = joined.groupby('id').agg({
 
 **Important**: This platform is designed for research and analysis purposes. Always comply with Reddit's API terms of service and respect user privacy.
 
-**Repository**: [https://github.com/sivanaraharisetty/f1-citizenship](https://github.com/sivanaraharisetty/f1-citizenship)
+**Repository**: [https://github.com/your-username/immigration-journey-analyzer](https://github.com/your-username/immigration-journey-analyzer)

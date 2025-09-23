@@ -125,4 +125,4 @@ python -m src.main
 
 **Last Updated**: 2025-09-23 12:30:00 UTC  
 **Next Update**: Every 30 minutes during active training  
-**Repository**: [https://github.com/sivanaraharisetty/f1-citizenship](https://github.com/sivanaraharisetty/f1-citizenship)
+**Repository**: [https://github.com/your-username/immigration-journey-analyzer](https://github.com/your-username/immigration-journey-analyzer)

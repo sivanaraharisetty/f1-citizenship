@@ -4,7 +4,7 @@
 
 ### 1. Clone and Setup
 ```bash
-git clone https://github.com/sivanaraharisetty/f1-citizenship.git
+git clone https://github.com/your-username/immigration-journey-analyzer.git
 cd f1-citizenship
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
@@ -38,7 +38,7 @@ That's it! The system will:
 ## Monitor Progress
 
 ### GitHub Repository
-- **URL**: https://github.com/sivanaraharisetty/f1-citizenship
+- **URL**: https://github.com/your-username/immigration-journey-analyzer
 - **Files to Watch**: `REALTIME_STATUS.md` (updates every 30 min)
 
 ### Local Monitoring
