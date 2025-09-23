@@ -184,20 +184,3 @@ See [docs/AWAY_MODE_INSTRUCTIONS.md](docs/AWAY_MODE_INSTRUCTIONS.md) for automat
 | [Real-time Status](docs/REALTIME_STATUS.md) | Live training progress |
 | [Training Analysis](docs/TRAINING_ANALYSIS.md) | Performance metrics |
 
-## 🤝 Contributing
-
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-## 📞 Support
-
-- **Issues**: [GitHub Issues](https://github.com/your-username/immigration-journey-analyzer/issues)
-- **Security**: [SECURITY.md](SECURITY.md)
-- **Documentation**: [docs/](docs/)
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-**Built with ❤️ for immigration research and analysis**
