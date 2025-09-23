@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.DS_Store
+
+# Environments
+.env
+.venv/
+venv/
+env/
+
+# Project outputs
+results/
+logs/
+
+# Checkpoints and artifacts
+**/checkpoint-*/
+**/epoch_*/
+**/trainer_state.json
+**/training_args.bin
+**/optimizer.pt
+**/scheduler.pt
+**/rng_state.pth
+
+# Jupyter
+.ipynb_checkpoints/
+
