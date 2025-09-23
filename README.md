@@ -1,47 +1,325 @@
-# s3-classifier-project documentation
+# 🎓 F1-Citizenship: International Student Life Cycle Classifier
 
-## Project Overview
-This project aims to build a classifier using data stored in an S3 bucket. The data consists of comments and posts from Reddit, partitioned by year and month in parquet format. The classifier will be trained on this data to perform specific tasks, such as sentiment analysis or topic classification.
+> **A scalable machine learning pipeline for analyzing Reddit discussions across the international student immigration journey from F1 visa to citizenship.**
 
-## Project Structure
+[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://python.org)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.3+-red.svg)](https://pytorch.org)
+[![Transformers](https://img.shields.io/badge/Transformers-4.45+-green.svg)](https://huggingface.co/transformers)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+## 🎯 Project Overview
+
+This project analyzes Reddit discussions to understand the international student immigration journey through 5 key stages:
+
+1. **🎓 Student Visa Stage** (F1, CPT, OPT, STEM OPT)
+2. **💼 Work Visa Stage** (H1B, Employer Sponsorship) 
+3. **🟢 Permanent Residency Stage** (PERM, I-140, Green Card)
+4. **🇺🇸 Citizenship Stage** (Naturalization)
+5. **⚖️ General Immigration & Legal Issues** (Cross-cutting)
+
+### Key Features
+
+- **🔄 Scalable Processing**: Handles 2TB+ datasets with row-group streaming
+- **🧠 Advanced ML**: BERT-based classification with early stopping & AMP
+- **📊 Real-time Monitoring**: ETA tracking, structured logging, progress persistence
+- **🛡️ Production Ready**: Fault tolerance, resume capability, external key tracking
+- **📈 Rich Analytics**: Per-chunk metrics, class distribution, engagement analysis
+
+## 🏗️ Architecture
+
+```mermaid
+graph TB
+    A[S3 Data Lake] --> B[Streaming Loader]
+    B --> C[Text Preprocessing]
+    C --> D[Label Classification]
+    D --> E[BERT Training]
+    E --> F[Model Checkpoints]
+    F --> G[Results & Analytics]
+    
+    H[Config YAML] --> B
+    I[State Management] --> E
+    J[Progress Tracking] --> B
 ```
-s3-classifier-project
-├── src
-│   ├── main.py               # Entry point of the application
-│   ├── data
-│   │   ├── s3_config.py      # Configuration for S3 access
-│   │   ├── loader.py          # Data loading functions
-│   │   └── preprocess.py      # Data preprocessing functions
-│   ├── model
-│   │   ├── train.py           # Model training functions
-│   │   └── evaluate.py        # Model evaluation functions
-│   └── utils
-│       └── helpers.py         # Utility functions
-├── requirements.txt           # Project dependencies
-├── README.md                  # Project documentation
-└── config
-    └── config.yaml            # Configuration settings
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Python 3.9+
+- AWS credentials configured
+- 8GB+ RAM recommended
+- GPU (optional, supports MPS/CPU fallback)
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/sivanaraharisetty/f1-citizenship.git
+cd f1-citizenship
+
+# Create virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
 ```
 
-## Setup Instructions
-1. Clone the repository to your local machine.
-2. Navigate to the project directory.
-3. Install the required dependencies using:
-   ```
-   pip install -r requirements.txt
-   ```
+### Configuration
 
-## Usage
-To run the project, execute the following command:
+Edit `config/config.yaml`:
+
+```yaml
+data:
+  s3:
+    bucket: "your-bucket-name"
+    comments_path: "reddit/comments/"
+    posts_path: "reddit/posts/"
+  chunking:
+    files_per_chunk: 10
+    rows_per_chunk: 25000
+
+model:
+  parameters:
+    learning_rate: 2e-5
+    epochs: 1
+    batch_size: 32
+
+logging:
+  level: "INFO"
+  log_file: "logs/classifier.log"
 ```
-python src/main.py
+
+### Run Training
+
+```bash
+# Start the training pipeline
+python -m src.main
+
+# Monitor progress
+tail -f logs/classifier.log
 ```
-This will initiate the data loading, preprocessing, model training, and evaluation processes.
 
-## Configuration
-Configuration settings for S3 access and model parameters can be found in the following files:
-- `src/data/s3_config.py`: Contains the S3 bucket details and credentials.
-- `config/config.yaml`: Contains model parameters and data paths.
+## 📊 Data Schema
 
-## License
-This project is licensed under the MIT License. See the LICENSE file for more details.
+### Input Data Structure
+
+**Comments Table:**
+- `body`: Comment text content
+- `link_id`: References post as `t3_<post_id>`
+- `subreddit`: Community identifier
+- `created_utc`: Timestamp
+
+**Posts Table:**
+- `title`: Post title
+- `selftext`: Post body content  
+- `id`: Unique post identifier
+- `subreddit`: Community identifier
+- `created_utc`: Timestamp
+
+### Label Taxonomy
+
+| Stage | Labels | Keywords | Subreddits |
+|-------|--------|----------|------------|
+| **Student** | `student_visa` | F1, CPT, OPT, STEM OPT, I-765 | r/F1Visa, r/OPT, r/stemopt |
+| **Work** | `work_visa` | H1B, H-1B, employer sponsor | r/h1b, r/WorkVisas |
+| **Permanent** | `green_card` | I-140, PERM, GC, I-485 | r/greencard, r/greencardprocess |
+| **Citizenship** | `citizenship` | naturalization, citizenship | r/citizenship |
+| **General** | `general_immigration` | visa denial, delays, backlog | r/immigration, r/immigrationlaw |
+
+## 🔧 Advanced Usage
+
+### Custom Configuration
+
+```bash
+# Override config file
+export CLASSIFIER_CONFIG="/path/to/custom/config.yaml"
+
+# Set custom seed
+export SEED=42
+
+# Configure AWS region
+export S3_REGION=us-east-1
+```
+
+### Resume Training
+
+The system automatically resumes from the last checkpoint:
+
+```bash
+# Training will resume from results/YYYYMMDD/state.json
+python -m src.main
+```
+
+### Monitor Large Datasets
+
+For 2TB+ datasets, the system provides real-time ETA:
+
+```
+2025-09-23 09:17:10,083 INFO classifier - Estimated unprocessed bytes: 1573001799868
+2025-09-23 09:21:09,110 INFO classifier - Processing chunk 0 with 1 files and 791847 rows
+2025-09-23 09:25:15,234 INFO classifier - Finished chunk 0. Metrics: {'accuracy': 0.85, 'f1': 0.82}. Speed ~ 45.2 MB/s. ETA ~ 2h 15m
+```
+
+## 📈 Results & Analytics
+
+### Output Structure
+
+```
+results/YYYYMMDD/
+├── chunk_0/                    # Per-chunk checkpoints
+│   ├── config.json
+│   ├── model.safetensors
+│   └── metrics_*.json
+├── evaluation_results.json     # Global metrics (JSONL)
+├── label_mapping.json         # Class mapping
+├── state.json                 # Resume state
+└── processed_keys.sqlite     # Progress tracking
+```
+
+### Key Metrics
+
+- **Accuracy**: Overall classification accuracy
+- **F1-Score**: Weighted F1 across all classes
+- **Precision/Recall**: Per-class performance
+- **Processing Speed**: MB/s throughput
+- **ETA**: Estimated completion time
+
+### Visualization
+
+```python
+import pandas as pd
+import json
+
+# Load results
+results = []
+with open('results/20250923/evaluation_results.json', 'r') as f:
+    for line in f:
+        results.append(json.loads(line))
+
+df = pd.DataFrame(results)
+print(df[['chunk_index', 'metrics', 'num_rows']].head())
+```
+
+## 🛠️ Development
+
+### Project Structure
+
+```
+s3-classifier-project/
+├── src/
+│   ├── data/
+│   │   ├── loader.py          # S3 streaming loader
+│   │   └── preprocess.py      # Text preprocessing & labeling
+│   ├── model/
+│   │   ├── train.py           # BERT trainer with early stopping
+│   │   └── evaluate.py        # Model evaluation
+│   ├── utils/
+│   │   ├── helpers.py         # Utilities & seeding
+│   │   ├── alerts.py          # Email notifications
+│   │   └── processed_store.py # Progress tracking
+│   └── main.py                # Main training pipeline
+├── config/
+│   └── config.yaml            # Configuration
+├── requirements.txt           # Dependencies
+└── README.md                 # This file
+```
+
+### Adding New Labels
+
+1. **Update keyword patterns** in `src/data/preprocess.py`:
+```python
+new_stage_pat = r"(your|new|keywords|here)"
+```
+
+2. **Add subreddit mapping**:
+```python
+subreddit_to_label = {
+    "newsubreddit": "new_stage",
+    # ... existing mappings
+}
+```
+
+3. **Test with sample data**:
+```bash
+python -c "
+from src.data.preprocess import preprocess_data
+import pandas as pd
+df = pd.DataFrame({'text': ['your test text'], 'subreddit': ['newsubreddit']})
+result = preprocess_data(df)
+print(result)
+"
+```
+
+## 🔍 Research Applications
+
+### Immigration Journey Analysis
+
+- **Stage Transitions**: Track user progression through immigration stages
+- **Pain Points**: Identify common issues at each stage
+- **Policy Impact**: Measure effects of policy changes on discussions
+- **Community Support**: Analyze help-seeking patterns
+
+### Network Analysis
+
+```python
+# Post-Comment Relationships
+posts_df = load_posts()
+comments_df = load_comments()
+
+# Join posts with comments
+joined = comments_df.merge(
+    posts_df, 
+    left_on='link_id', 
+    right_on='id', 
+    how='inner'
+)
+
+# Analyze engagement
+engagement = joined.groupby('id').agg({
+    'body': 'count',
+    'score': 'sum'
+}).reset_index()
+```
+
+## 📚 References
+
+### Official Immigration Resources
+
+- [USCIS](https://www.uscis.gov) - Official visa & green card processes
+- [Department of State](https://travel.state.gov) - Visa information & embassy contacts
+- [SEVP](https://www.ice.gov/sevis) - Student visa compliance
+- [Visa Bulletin](https://travel.state.gov/visa-bulletin.html) - Green card wait times
+
+### Academic Papers
+
+- Immigration policy impact studies
+- Social media analysis methodologies
+- Natural language processing for legal text
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Reddit communities for providing valuable discussion data
+- Hugging Face for the Transformers library
+- AWS for scalable data storage
+- The open-source community for foundational tools
+
+---
+
+**⚠️ Important**: This tool is for research and analysis purposes. Always comply with Reddit's API terms of service and respect user privacy.
+
+**📧 Contact**: [sivanaraharisetty@users.noreply.github.com](mailto:sivanaraharisetty@users.noreply.github.com)
+
+**🔗 Repository**: [https://github.com/sivanaraharisetty/f1-citizenship](https://github.com/sivanaraharisetty/f1-citizenship)
