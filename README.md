@@ -1,6 +1,6 @@
-# 🎓 F1-Citizenship: International Student Life Cycle Classifier
+# 🎓 Immigration Journey Analyzer
 
-> **A scalable machine learning pipeline for analyzing Reddit discussions across the international student immigration journey from F1 visa to citizenship.**
+> **An intelligent machine learning platform for analyzing immigration discussions across the international student life cycle from F1 visa to citizenship.**
 
 [![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://python.org)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.3+-red.svg)](https://pytorch.org)
@@ -19,26 +19,26 @@ This project analyzes Reddit discussions to understand the international student
 
 ### Key Features
 
-- **🔄 Scalable Processing**: Handles 2TB+ datasets with row-group streaming
-- **🧠 Advanced ML**: BERT-based classification with early stopping & AMP
-- **📊 Real-time Monitoring**: ETA tracking, structured logging, progress persistence
-- **🛡️ Production Ready**: Fault tolerance, resume capability, external key tracking
-- **📈 Rich Analytics**: Per-chunk metrics, class distribution, engagement analysis
+- **🔄 Enterprise-Scale Processing**: Handles 2TB+ datasets with intelligent streaming
+- **🧠 Advanced AI**: BERT-based classification with early stopping & mixed precision
+- **📊 Real-time Intelligence**: ETA tracking, structured logging, progress persistence
+- **🛡️ Production-Grade**: Fault tolerance, resume capability, distributed processing
+- **📈 Comprehensive Analytics**: Per-stage metrics, journey mapping, engagement insights
 
 ## 🏗️ Architecture
 
 ```mermaid
 graph TB
-    A[S3 Data Lake] --> B[Streaming Loader]
-    B --> C[Text Preprocessing]
-    C --> D[Label Classification]
-    D --> E[BERT Training]
-    E --> F[Model Checkpoints]
-    F --> G[Results & Analytics]
+    A[Immigration Data Lake] --> B[Intelligent Stream Processor]
+    B --> C[Advanced Text Preprocessing]
+    C --> D[Multi-Stage Classification]
+    D --> E[AI Model Training]
+    E --> F[Checkpoint Management]
+    F --> G[Analytics & Insights]
     
-    H[Config YAML] --> B
-    I[State Management] --> E
-    J[Progress Tracking] --> B
+    H[Configuration Engine] --> B
+    I[State Orchestration] --> E
+    J[Progress Intelligence] --> B
 ```
 
 ## 🚀 Quick Start
@@ -90,13 +90,13 @@ logging:
   log_file: "logs/classifier.log"
 ```
 
-### Run Training
+### Run Analysis
 
 ```bash
-# Start the training pipeline
+# Start the immigration journey analysis
 python -m src.main
 
-# Monitor progress
+# Monitor real-time progress
 tail -f logs/classifier.log
 ```
 
@@ -142,18 +142,18 @@ export SEED=42
 export S3_REGION=us-east-1
 ```
 
-### Resume Training
+### Resume Analysis
 
-The system automatically resumes from the last checkpoint:
+The platform automatically resumes from the last checkpoint:
 
 ```bash
-# Training will resume from results/YYYYMMDD/state.json
+# Analysis will resume from results/YYYYMMDD/state.json
 python -m src.main
 ```
 
 ### Monitor Large Datasets
 
-For 2TB+ datasets, the system provides real-time ETA:
+For enterprise-scale datasets, the platform provides intelligent ETA tracking:
 
 ```
 2025-09-23 09:17:10,083 INFO classifier - Estimated unprocessed bytes: 1573001799868
@@ -206,21 +206,21 @@ print(df[['chunk_index', 'metrics', 'num_rows']].head())
 ### Project Structure
 
 ```
-s3-classifier-project/
+immigration-journey-analyzer/
 ├── src/
 │   ├── data/
-│   │   ├── loader.py          # S3 streaming loader
-│   │   └── preprocess.py      # Text preprocessing & labeling
+│   │   ├── loader.py          # Intelligent stream processor
+│   │   └── preprocess.py      # Advanced text preprocessing & labeling
 │   ├── model/
-│   │   ├── train.py           # BERT trainer with early stopping
-│   │   └── evaluate.py        # Model evaluation
+│   │   ├── train.py           # AI model trainer with early stopping
+│   │   └── evaluate.py        # Model evaluation & metrics
 │   ├── utils/
-│   │   ├── helpers.py         # Utilities & seeding
-│   │   ├── alerts.py          # Email notifications
-│   │   └── processed_store.py # Progress tracking
-│   └── main.py                # Main training pipeline
+│   │   ├── helpers.py         # Core utilities & reproducibility
+│   │   ├── alerts.py          # Intelligent notifications
+│   │   └── processed_store.py # Progress intelligence
+│   └── main.py                # Main analysis pipeline
 ├── config/
-│   └── config.yaml            # Configuration
+│   └── config.yaml            # Configuration engine
 ├── requirements.txt           # Dependencies
 └── README.md                 # This file
 ```
@@ -318,7 +318,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**⚠️ Important**: This tool is for research and analysis purposes. Always comply with Reddit's API terms of service and respect user privacy.
+**⚠️ Important**: This platform is designed for research and analysis purposes. Always comply with Reddit's API terms of service and respect user privacy.
 
 **📧 Contact**: [sivanaraharisetty@users.noreply.github.com](mailto:sivanaraharisetty@users.noreply.github.com)
 
