@@ -1,8 +1,8 @@
-# Real-Time Training Status - 2025-09-27 04:30:47 UTC
+# Real-Time Training Status - 2025-09-27 04:32:23 UTC
 
 ## Current Status
 - **Training**: ACTIVE
-- **Last Update**: 2025-09-27T04:30:47.208387
+- **Last Update**: 2025-09-27T04:32:23.159058
 - **Progress**: 2025-09-23 09:21:09,110 INFO classifier - Processing chunk 0 with 1 files and 791847 rows
 - **Completion**: In Progress
 - **Speed**: Calculating...
@@ -15,7 +15,7 @@
 - **Script**: monitor_and_update.py
 - **Update Frequency**: Every 30 minutes
 - **Log File**: monitor.log
-- **Repository**: https://github.com/sivanaraharisetty/f1-citizenship
+- **Repository**: https://github.com/your-username/immigration-journey-analyzer
 
 ---
-*Auto-generated at 2025-09-27T04:30:47.208398*
+*Auto-generated at 2025-09-27T04:32:23.159068*
