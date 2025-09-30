@@ -1,0 +1,24 @@
+model:
+  name: "MyClassifier"
+  version: "1.0"
+  parameters:
+    learning_rate: 5e-5
+    batch_size: 32
+    epochs: 1
+
+data:
+  s3:
+    bucket: "coop-published-zone-298305347319"
+    comments_path: "arcticshift_reddit/comments/"
+    posts_path: "arcticshift_reddit/posts/"
+    file_format: "parquet"
+    partitioning:
+      year: true
+      month: true
+  chunking:
+    files_per_chunk: 1
+    rows_per_chunk: 1000  # ULTRA-FAST: Process only 1000 rows per chunk
+
+logging:
+  level: "INFO"
+  log_file: "logs/classifier.log"
