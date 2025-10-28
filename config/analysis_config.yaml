@@ -1,0 +1,59 @@
+# Analysis Configuration
+# Filters, thresholds, parameters
+
+analysis:
+  # Temporal Analysis
+  temporal:
+    policy_events:
+      trump_travel_ban: "2017-01-27"
+      h1b_suspension: "2020-06-22"
+      biden_immigration_reform: "2021-01-20"
+      daca_renewal: "2021-01-20"
+      h1b_cap_increase: "2021-12-06"
+    
+    analysis_windows:
+      short_term: 30   # 30 days
+      medium_term: 90  # 90 days
+      long_term: 180   # 180 days
+  
+  # Visa Stages Configuration
+  visa_stages:
+    student_visa:
+      subreddits: ["F1Visa", "OPT", "stemopt", "immigration", "visa", "immigrationusa", "USCISquestions"]
+      keywords: ["F1", "CPT", "OPT", "STEM OPT", "Visa interview", "Visa stamping", "visa appointment", "Work authorization", "I-765", "Visa renewal", "Visa status maintenance"]
+    
+    work_visa:
+      subreddits: ["h1b", "WorkVisas", "immigrationlaw", "immigrationattorney", "immigrationusa", "USCISquestions"]
+      keywords: ["H1B", "H-1B", "Employer sponsor", "Job search visa issues", "Employer withdrawal", "Visa denial", "Visa delays", "Immigration backlog", "Immigration policy changes"]
+    
+    permanent_residency:
+      subreddits: ["greencard", "greencardprocess", "immigration", "USCIS", "immigrationlaw", "USCISquestions"]
+      keywords: ["I-140", "PERM", "Green Card", "GC", "Adjustment of status", "Consular processing", "Priority date", "Visa bulletin", "RFE", "USCIS case status", "I-485", "Denial", "Delay"]
+    
+    citizenship:
+      subreddits: ["citizenship", "immigration", "USCIS", "immigrationlaw"]
+      keywords: ["Citizenship", "Naturalization", "Immigration reform", "Travel ban", "Deportation risk", "Immigration policy changes"]
+    
+    general_immigration:
+      subreddits: ["immigration", "immigrationlaw", "USCIS", "immigrationusa", "immigrationquestions", "visasupport", "immigrationattorney", "immigrationnews"]
+      keywords: ["Visa denial", "Visa delays", "Immigration backlog", "Immigration reform", "Legal help", "Work authorization", "Immigration policy"]
+  
+  # Analysis Thresholds
+  thresholds:
+    fear_keywords: ["afraid", "scared", "worried", "anxious", "panic", "terrified", "fear", "concern", "nervous"]
+    question_keywords: ["?", "how", "what", "when", "where", "why", "can i", "should i", "help"]
+    sentiment_threshold: 0.1
+    confidence_threshold: 0.7
+  
+  # Statistical Analysis
+  statistics:
+    min_sample_size: 30
+    confidence_level: 0.95
+    significance_threshold: 0.05
+  
+  # Output Configuration
+  output:
+    generate_plots: true
+    generate_reports: true
+    export_formats: ["json", "csv", "html"]
+    visualization_formats: ["png", "html", "pdf"]

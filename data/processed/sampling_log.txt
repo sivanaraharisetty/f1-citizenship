@@ -1,0 +1,24 @@
+2025-10-07 17:02:32,558 - INFO - Found credentials in environment variables.
+2025-10-07 17:02:33,052 - INFO -  Listing files with prefix: arcticshift_reddit/comments/year=2024/
+2025-10-07 17:02:33,714 - INFO -   Found 480 files
+2025-10-07 17:02:33,715 - INFO -  Listing files with prefix: arcticshift_reddit/comments/year=2025/
+2025-10-07 17:02:33,808 - INFO -   Found 245 files
+2025-10-07 17:02:33,808 - INFO -  Listing files with prefix: arcticshift_reddit/posts/year=2024/
+2025-10-07 17:02:33,876 - INFO -   Found 12 files
+2025-10-07 17:02:33,876 - INFO -  Listing files with prefix: arcticshift_reddit/posts/year=2025/
+2025-10-07 17:02:33,937 - INFO -   Found 6 files
+2025-10-07 17:02:33,937 - INFO - Processing 743 files with 10 workers
+2025-10-07 17:02:34,169 - INFO - Skipping checksum validation. Response did not contain one of the following algorithms: ['crc32', 'sha1', 'sha256'].
+2025-10-07 17:02:34,754 - INFO - Skipping checksum validation. Response did not contain one of the following algorithms: ['crc32', 'sha1', 'sha256'].
+2025-10-07 17:02:34,871 - INFO - Skipping checksum validation. Response did not contain one of the following algorithms: ['crc32', 'sha1', 'sha256'].
+2025-10-07 17:02:34,871 - INFO - Skipping checksum validation. Response did not contain one of the following algorithms: ['crc32', 'sha1', 'sha256'].
+2025-10-07 17:02:34,880 - INFO - Skipping checksum validation. Response did not contain one of the following algorithms: ['crc32', 'sha1', 'sha256'].
+2025-10-07 17:02:34,883 - INFO - Skipping checksum validation. Response did not contain one of the following algorithms: ['crc32', 'sha1', 'sha256'].
+2025-10-07 17:02:34,927 - INFO - Skipping checksum validation. Response did not contain one of the following algorithms: ['crc32', 'sha1', 'sha256'].
+2025-10-07 17:02:34,989 - INFO - Skipping checksum validation. Response did not contain one of the following algorithms: ['crc32', 'sha1', 'sha256'].
+2025-10-07 17:02:35,002 - INFO - Skipping checksum validation. Response did not contain one of the following algorithms: ['crc32', 'sha1', 'sha256'].
+2025-10-07 17:02:35,028 - INFO - Skipping checksum validation. Response did not contain one of the following algorithms: ['crc32', 'sha1', 'sha256'].
+2025-10-07 17:23:06,584 - INFO -  arcticshift_reddit/comments/year=2024/month=1/part-00007-0d199912-2c6b-473b-b33f-3b4fd82ae83b.c000.snappy.parquet: Success: 772 records
+2025-10-07 17:23:06,800 - INFO - Skipping checksum validation. Response did not contain one of the following algorithms: ['crc32', 'sha1', 'sha256'].
+2025-10-07 17:24:33,859 - INFO -  arcticshift_reddit/comments/year=2024/month=1/part-00004-0d199912-2c6b-473b-b33f-3b4fd82ae83b.c000.snappy.parquet: Success: 1045 records
+2025-10-07 17:24:34,086 - INFO - Skipping checksum validation. Response did not contain one of the following algorithms: ['crc32', 'sha1', 'sha256'].
