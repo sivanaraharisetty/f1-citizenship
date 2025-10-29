@@ -51,17 +51,18 @@ Discourse is analyzed across five visa stage categories:
   - **2025**: 77,073,526 records
   - **Combined Total**: 192+ million records
 - **Data Provider**: Arctic Shift (Reddit data archive)
+- **Data Availability**: Reddit data is available as monthly dumps on Arctic Shift; the torrent file was downloaded directly from Arctic Shift to obtain these dumps.
 
 ### 2.2 Data Collection Process
 
 #### 2.2.1 Initial Data Acquisition
 
-The raw Reddit data is obtained from Arctic Shift, a public Reddit data archive, through the following process:
+The raw Reddit data was obtained from Arctic Shift through the following process:
 
 1. **Torrent Download**:
-   - Data source: Arctic Shift Reddit torrent files
+   - Data source: Arctic Shift Reddit monthly dumps
    - Tool: `aria2c` (multi-protocol download utility, version 1.37.0+)
-   - Process: Files downloaded to EC2 instance in compressed format
+   - Process: Monthly `.zst` files downloaded via torrent to an EC2 instance
    - Command: `aria2c ~/reddit.torrent --dir=~/downloads/reddit`
    - Background execution: `nohup aria2c ~/reddit.torrent --dir=~/downloads/reddit > ~/aria2.log 2>&1 &`
 
@@ -79,7 +80,7 @@ The raw Reddit data is obtained from Arctic Shift, a public Reddit data archive,
 
 #### 2.2.2 Decompression Process
 
-Raw `.zst` files are decompressed to JSON format:
+Raw `.zst` files were decompressed to JSON format:
 
 1. **Decompression Tool**: `unzstd` (Zstandard decompression utility)
 2. **Process**:
