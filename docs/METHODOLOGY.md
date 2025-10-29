@@ -50,8 +50,167 @@ Discourse is analyzed across five visa stage categories:
   - **2024**: 115,289,778 records (complete dataset, no sampling)
   - **2025**: 77,073,526 records
   - **Combined Total**: 192+ million records
+- **Data Provider**: Arctic Shift (Reddit data archive)
 
-### 2.2 Data Access
+### 2.2 Data Collection Process
+
+#### 2.2.1 Initial Data Acquisition
+
+The raw Reddit data is obtained from Arctic Shift, a public Reddit data archive, through the following process:
+
+1. **Torrent Download**:
+   - Data source: Arctic Shift Reddit torrent files
+   - Tool: `aria2c` (multi-protocol download utility, version 1.37.0+)
+   - Process: Files downloaded to EC2 instance in compressed format
+   - Command: `aria2c ~/reddit.torrent --dir=~/downloads/reddit`
+   - Background execution: `nohup aria2c ~/reddit.torrent --dir=~/downloads/reddit > ~/aria2.log 2>&1 &`
+
+2. **File Format**:
+   - Initial format: `.zst` (Zstandard compressed files)
+   - Monthly structure: 
+     - Posts: `RS_YYYY-MM.zst` (e.g., `RS_2024-01.zst`)
+     - Comments: `RC_YYYY-MM.zst` (e.g., `RC_2024-01.zst`)
+
+3. **Data Volume**:
+   - **Posts**: ~150-200 GB per monthly file
+   - **Comments**: ~400-500 GB per monthly file
+   - **Total Monthly Input**: ~600-700 GB
+   - **Files per Month**: 2 files (1 posts + 1 comments)
+
+#### 2.2.2 Decompression Process
+
+Raw `.zst` files are decompressed to JSON format:
+
+1. **Decompression Tool**: `unzstd` (Zstandard decompression utility)
+2. **Process**:
+   - Command: `unzstd -c input.zst > output.json`
+   - Batch processing: Decompressed in background with logging
+   - Directory structure: `~/reddit_data/zstfiles/` and `~/reddit_data/jsonfiles/`
+   - Example: `nohup unzstd -c ~/reddit_data/zstfiles/RS_2024-01.zst > ~/reddit_data/jsonfiles/RS_2024-01.json 2> ~/reddit_data/nohup.log &`
+3. **Validation**: File size monitoring and content verification via log files
+
+### 2.3 ETL Pipeline Architecture
+
+The data processing pipeline follows a four-zone architecture designed for efficient data transformation and analytics:
+
+#### 2.3.1 Zone Architecture Overview
+
+**Raw Zone** (Landing Zone):
+- **Purpose**: Immutable landing zone for incoming JSON files
+- **Input**: Raw JSON files from decompression
+- **Process**: No transformation applied
+- **Output**: Raw JSON files for archive and replay capability
+- **Characteristics**:
+  - Full data preservation
+  - Very large files (high storage costs)
+  - Challenge: Storage scalability
+
+**Staging Zone** (Initial ETL):
+- **Purpose**: Initial transformation and normalization
+- **Input**: Raw JSON files from Raw zone
+- **Process**:
+  - Flatten nested JSON structures
+  - Partition by year and month
+  - Convert timestamps (`created_utc` → `created_at`)
+  - Write to Parquet format
+- **Output**: Clean, partitioned Parquet datasets
+- **Characteristics**:
+  - Efficient columnar format (Parquet)
+  - Improved query performance
+  - Challenge: Schema validation and compute costs
+
+**Refining Zone** (Data Quality):
+- **Purpose**: Data cleansing, enrichment, and validation
+- **Input**: Staged Parquet files
+- **Process**:
+  - Trim and normalize key fields (author, title, selftext, body)
+  - Validate required fields (`id`, `body`, `created_utc`)
+  - Flag deleted/removed posts and corrupt dates
+  - Add `is_valid_record` flag
+  - Drop exact duplicates
+  - Convert arrays to JSON (link_flair_richtext, author_flair_richtext)
+  - Add full JSON copy as `raw_record` column
+- **Output**: High-quality, validated datasets
+- **Characteristics**:
+  - Improved data quality
+  - Richer analytics capabilities
+  - Challenge: Validation rules and scaling
+
+**Publishing Zone** (Production Ready):
+- **Purpose**: Curated, production-ready datasets for analytics
+- **Input**: Refined Parquet files
+- **Process**:
+  - Ensure partition columns (`year`, `month`) present
+  - Repartition by year and month
+  - Filter to valid records (`is_valid_record = true`)
+  - Write in Snappy Parquet format (optimized compression)
+  - Update AWS Glue Catalog partitions
+  - Manage table permissions
+- **Output**: Analytic-ready, optimized datasets
+- **Characteristics**:
+  - Performance optimized for AWS Athena queries
+  - Easy access via Glue Catalog
+  - Challenge: Metadata consistency and security
+
+#### 2.3.2 AWS Glue Processing
+
+**Job Architecture**:
+- **Approach**: Separate Glue jobs for posts and comments (recommended initial approach)
+- **Rationale**:
+  - Simpler job logic and easier maintenance
+  - Isolated failure handling
+  - Flexible resource allocation
+  - Easier debugging
+- **Alternative**: Combined job (for optimization after stabilization)
+  - Pros: Reduced scheduling complexity, improved resource use
+  - Cons: Increased complexity, higher memory/CPU requirements
+
+**Job Configuration**:
+- **Input Parameters**: Year and month (for incremental processing)
+- **Processing Mode**: Monthly incremental data processing
+- **Output Format**: Partitioned Parquet with year/month partitioning
+- **Catalog Updates**: Automatic Glue Catalog partition updates
+- **Validation**: Row count validation and success/failure logging
+
+#### 2.3.3 Stage-Specific Processing Details
+
+**Raw → Staging**:
+- Reads raw JSON with full schema
+- Applies schema validation
+- Adds `created_at`, `year`, `month` columns
+- Writes partitioned Parquet to staging path
+- Uses overwrite mode
+- No validation or deduplication at this stage
+
+**Staging → Refining**:
+- **Posts Processing**:
+  - Trims and normalizes: `author`, `title`, `selftext`
+  - Flags deleted/removed posts
+  - Converts arrays to JSON (link_flair_richtext, author_flair_richtext)
+  
+- **Comments Processing**:
+  - Validates required fields: `id`, `body`, `created_utc`
+  - Trims and normalizes: `author`, `body`
+  - Flags corrupt dates
+  
+- **Common Operations**:
+  - Adds `is_valid_record` flag
+  - Drops exact duplicates
+  - Skips existing partitions using S3 partition check
+  - Retains partition structure
+  - Adds full JSON copy as `raw_record` column
+  - Writes valid data in append mode
+
+**Refining → Publishing**:
+- Adds partition columns if missing
+- Repartitions by year and month
+- Filters to valid records (`is_valid_record = true`)
+- Writes to published zone in Snappy Parquet format
+- Uses overwrite mode
+- Drops duplicates again
+- Skips already published partitions using S3 checks
+
+### 2.4 Data Access
 
 Data is accessed via AWS S3 with the following configuration:
 
@@ -60,8 +219,37 @@ Data is accessed via AWS S3 with the following configuration:
 - **File Structure**: Year-based partitioning (`2024/`, `2025/`)
 - **Access Method**: boto3 and s3fs libraries
 - **Authentication**: AWS credentials configured via environment variables
+- **Query Interface**: AWS Athena for SQL-based analytics on published zone
 
-### 2.3 Subreddit Coverage
+### 2.5 Infrastructure and Tools
+
+#### 2.5.1 Download Infrastructure
+- **EC2 Instance**: Amazon EC2 for data download and initial processing
+- **SSH Access**: Secure shell access for remote management
+- **Storage**: EBS volumes for temporary data storage
+
+#### 2.5.2 Data Processing Tools
+- **aria2c**: Multi-protocol download utility for torrent files
+  - Version: 1.37.0+
+  - Installation: Compiled from source or via package manager
+  - Features: Background download, progress tracking, resume capability
+  
+- **unzstd**: Zstandard decompression utility
+  - Purpose: Decompress `.zst` files to JSON
+  - Usage: `unzstd -c input.zst > output.json`
+  - Process: Batch decompression with logging
+
+- **AWS Glue**: Serverless ETL service
+  - Purpose: Transform JSON to Parquet, apply schema, partition data
+  - Features: Spark-based processing, automatic catalog updates
+  - Monitoring: Job logs, validation, success/failure tracking
+
+#### 2.5.3 Data Storage Formats
+- **JSON**: Initial format from decompression (Raw zone)
+- **Parquet**: Columnar format for efficient storage and querying (Staging/Refining/Publishing zones)
+- **Compression**: Snappy compression for optimized Parquet files (Publishing zone)
+
+### 2.6 Subreddit Coverage
 
 Data is collected from multiple visa-related subreddits including:
 
