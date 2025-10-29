@@ -15,7 +15,7 @@ data:
   rare_event_threshold: 0.05  # 5% threshold for rare events
   
   # Text Processing
-  max_text_length: 512  # Maximum text length for processing
+  max_text_length: 512  # BERT token limit
   min_text_length: 10
   remove_stopwords: true
   handle_emojis: true

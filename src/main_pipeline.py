@@ -18,7 +18,7 @@ from data_sampling import RedditDataSampler
 from data_cleaning import RedditDataCleaner
 from descriptive_analysis import RedditDescriptiveAnalyzer
 from annotation_system import RedditAnnotationSystem
-# BERT classifier removed - using keyword-based analysis
+from bert_classifier import RedditBERTClassifier
 from evaluation_metrics import RedditEvaluationMetrics
 from temporal_analysis import RedditTemporalAnalyzer
 from visualization_tools import RedditVisualizationTools
@@ -137,14 +137,19 @@ class RedditAnalysisPipeline:
         logger.info(f"Annotation completed: {len(annotated_df)} annotated records")
         return annotated_df
     
-    def run_keyword_analysis(self, df: pd.DataFrame) -> Dict:
-        """Run keyword-based analysis"""
-        logger.info("Starting keyword-based analysis...")
+    def run_classifier_training(self, df: pd.DataFrame) -> Dict:
+        """Run BERT classifier training"""
+        logger.info("Starting BERT classifier training...")
         
-        # Keyword-based analysis is performed in complete_no_sampling_analysis.py
-        # This method kept for compatibility but analysis runs separately
-        logger.info("Keyword-based analysis runs via complete_no_sampling_analysis.py")
-        return {}
+        classifier = RedditBERTClassifier()
+        
+        # Run training
+        training_results = classifier.run_full_training(df)
+        
+        self.results['classifier_training'] = training_results
+        
+        logger.info("BERT classifier training completed")
+        return training_results
     
     def run_evaluation(self, y_true: np.ndarray, y_pred: np.ndarray, 
                       y_scores: np.ndarray = None, texts: List[str] = None) -> Dict:
@@ -198,7 +203,7 @@ class RedditAnalysisPipeline:
         if steps is None:
             steps = [
                 'sampling', 'cleaning', 'descriptive_analysis', 
-                'annotation', 'evaluation',
+                'annotation', 'classifier_training', 'evaluation',
                 'temporal_analysis', 'visualization'
             ]
         
@@ -262,7 +267,19 @@ class RedditAnalysisPipeline:
                     logger.error("No annotated data found and annotation step skipped")
                     return self.results
             
-            # Step 5: Evaluation
+            # Step 5: Classifier Training
+            if 'classifier_training' in steps:
+                training_results = self.run_classifier_training(annotated_data)
+            else:
+                # Load existing training results
+                training_file = self.config.get_metrics_path() / "training_results.json"
+                if training_file.exists():
+                    with open(training_file, 'r') as f:
+                        training_results = json.load(f)
+                else:
+                    training_results = {}
+            
+            # Step 6: Evaluation (if we have predictions)
             if 'evaluation' in steps:
                 # This would typically use model predictions
                 # For now, we'll skip this step
@@ -288,6 +305,7 @@ class RedditAnalysisPipeline:
                 # Combine all results for visualization
                 all_data = {
                     'descriptive_analysis': descriptive_results,
+                    'classifier_training': training_results,
                     'evaluation': evaluation_results,
                     'temporal_analysis': temporal_results
                 }
@@ -356,6 +374,13 @@ class RedditAnalysisPipeline:
             print(f"  Coverage: {annotation['coverage']:.2%}")
             print(f"  Average confidence: {annotation['avg_confidence']:.3f}")
         
+        if 'classifier_training' in self.results:
+            training = self.results['classifier_training']
+            if 'test_metrics' in training:
+                test_metrics = training['test_metrics']
+                print(f"\nModel Performance:")
+                print(f"  Test F1 Score: {test_metrics['test_f1']:.4f}")
+                print(f"  Test Loss: {test_metrics['test_loss']:.4f}")
         
         duration = datetime.now() - self.start_time
         print(f"\nPipeline Duration: {duration}")
@@ -366,7 +391,7 @@ def main():
     parser = argparse.ArgumentParser(description='Reddit Visa Discourse Analysis Pipeline')
     parser.add_argument('--steps', nargs='+', 
                        choices=['sampling', 'cleaning', 'descriptive_analysis', 
-                               'annotation', 'evaluation',
+                               'annotation', 'classifier_training', 'evaluation',
                                'temporal_analysis', 'visualization'],
                        default=None,
                        help='Specific steps to run (default: all steps)')

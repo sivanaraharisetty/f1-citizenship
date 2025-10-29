@@ -1,10 +1,10 @@
 #!/bin/bash
 # Full Pipeline Execution Script
-# Runs the complete Reddit Visa Discourse Analysis pipeline end-to-end
+# Runs the complete BERT classifier pipeline end-to-end
 
 set -e  # Exit on any error
 
-echo "Starting Full Reddit Visa Discourse Analysis Pipeline..."
+echo "Starting Full BERT Classifier Pipeline..."
 
 # Set up logging
 LOG_FILE="logs/pipeline_$(date +%Y%m%d_%H%M%S).log"
@@ -44,23 +44,53 @@ else
     log "Step 3: Annotation already exists, skipping"
 fi
 
-# Step 4: Complete Dataset Analysis
-log "Step 4: Complete Dataset Analysis"
-python src/analysis/complete_no_sampling_analysis.py \
+# Step 4: Model Training
+log "Step 4: Model Training"
+python src/classification/bert_classifier.py \
+    --input data/processed/annotated_data.parquet \
+    --config config/model_config.yaml \
+    --output models/checkpoints/ \
     --log-file "$LOG_FILE"
 
-# Step 5: Temporal Analysis
-log "Step 5: Temporal Analysis"
+# Step 5: Model Evaluation
+log "Step 5: Model Evaluation"
+python src/analysis/evaluation_metrics.py \
+    --model-path models/checkpoints/ \
+    --test-data data/processed/annotated_data.parquet \
+    --output results/metrics/evaluation_results.json \
+    --log-file "$LOG_FILE"
+
+# Step 6: Full Dataset Classification
+log "Step 6: Full Dataset Classification"
+python src/classification/inference.py \
+    --model-path models/checkpoints/ \
+    --input data/processed/cleaned_data.parquet \
+    --output data/processed/classified_data.parquet \
+    --log-file "$LOG_FILE"
+
+# Step 7: Temporal Analysis
+log "Step 7: Temporal Analysis"
 python src/analysis/temporal_analysis.py \
+    --input data/processed/classified_data.parquet \
     --config config/analysis_config.yaml \
     --output results/reports/temporal_analysis.json \
     --log-file "$LOG_FILE"
 
-# Step 6: Visualization
-log "Step 6: Visualization"
+# Step 8: Visualization
+log "Step 8: Visualization"
 python src/visualization/visualization_tools.py \
+    --input data/processed/classified_data.parquet \
     --analysis-results results/reports/temporal_analysis.json \
     --output results/visualizations/ \
+    --log-file "$LOG_FILE"
+
+# Step 9: Report Generation
+log "Step 9: Report Generation"
+python src/visualization/report_builder.py \
+    --data data/processed/classified_data.parquet \
+    --metrics results/metrics/evaluation_results.json \
+    --analysis results/reports/temporal_analysis.json \
+    --output results/reports/comprehensive_report.html \
     --log-file "$LOG_FILE"
 
 log "Pipeline completed successfully!"
