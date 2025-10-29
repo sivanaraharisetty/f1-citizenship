@@ -740,11 +740,12 @@ For each label (fear, question, fear_driven_question, other):
 
 ### 13.1 Limitations
 
-- **Sampling**: 1% sample may not capture all rare patterns
-- **Reddit Bias**: Reddit users may not represent all visa applicants
-- **Temporal Scope**: Limited to 2024-2025 data
-- **Language**: English-only analysis
-- **Label Ambiguity**: Some posts may have ambiguous labels
+- **Complete Dataset Analysis**: The full dataset (192+ million records) has been analyzed without sampling, providing comprehensive coverage. However, initial exploratory analyses used stratified sampling (1%) for computational efficiency.
+- **Reddit Bias**: Reddit users may not represent all visa applicants; findings are specific to Reddit discourse patterns.
+- **Temporal Scope**: Comprehensive analysis covers 2024 (complete year) and 2025 (partial year with full coverage available).
+- **Language**: English-only analysis; non-English discourse is excluded.
+- **Label Ambiguity**: Some posts may have ambiguous labels, requiring manual review for edge cases.
+- **Keyword-Based Detection**: Initial fear and Q&A detection uses keyword matching; BERT classification provides more nuanced understanding.
 
 ### 13.2 Future Work
 
@@ -788,11 +789,67 @@ See source code in `src/` directory for detailed implementation.
 
 ## Appendix C: Results and Findings
 
-See `results/` directory for detailed analysis results and visualizations.
+### C.1 Complete Dataset Analysis Results
+
+#### C.1.1 2024 Analysis Results (Complete Dataset, No Sampling)
+
+- **Total Records Analyzed**: 115,289,778
+- **Files Processed**: Complete dataset across all 12 months
+- **Fear Detection**:
+  - Total Fear Cases: 21,793,076
+  - Fear Rate: 18.9% (0.189)
+- **Question Detection**:
+  - Total Q&A Cases: 47,759,518
+  - Q&A Rate: 41.4% (0.414)
+- **Visa Stage Distribution**:
+  - F1 (Student Visa): 14,502,378 records (12.6%)
+  - OPT: 40,422,496 records (35.1%)
+  - H1B: 206,204 records (0.2%)
+  - Green Card: 7,208,835 records (6.3%)
+  - Citizenship: 1,280,921 records (1.1%)
+  - General Immigration: 1,086,146 records (0.9%)
+
+#### C.1.2 2025 Analysis Results (Complete Dataset)
+
+- **Total Records Analyzed**: 77,073,526
+- **Files Processed**: 6,923 files (all successfully processed)
+- **Fear Detection**:
+  - Total Fear Cases: 12,160,505
+  - Fear Rate: 15.8% (estimated, based on 2024 patterns)
+- **Question Detection**:
+  - Total Q&A Cases: 51,897,196
+  - Q&A Rate: 67.4% (estimated)
+- **Visa Stage Distribution**:
+  - F1 (Student Visa): 19,131,575 records (24.8%)
+  - OPT: 24,036,491 records (31.2%)
+  - H1B: 154,421 records (0.2%)
+  - Green Card: 4,235,052 records (5.5%)
+  - Citizenship: 1,010,571 records (1.3%)
+  - General Immigration: 812,636 records (1.1%)
+
+#### C.1.3 Key Findings
+
+1. **Fear Expression Prevalence**: Approximately 18.9% of visa-related discourse contains expressions of fear or anxiety, indicating significant emotional distress in the immigration process.
+
+2. **Question Density**: Over 41% of discourse involves questions, highlighting the information-seeking nature of visa-related discussions.
+
+3. **Visa Stage Focus**: OPT-related discussions dominate the discourse (35.1% in 2024, 31.2% in 2025), followed by F1 student visa discussions (12.6% in 2024, increasing to 24.8% in 2025). This shift indicates growing student visa concerns in 2025.
+
+4. **Temporal Coverage**: Analysis covers complete years (2024: 12 months, 2025: partial year with comprehensive coverage).
+
+5. **Dataset Scale**: Combined dataset of 192+ million records provides robust statistical power for analysis.
+
+### C.2 Detailed Results Files
+
+See `results/` directory for detailed analysis results and visualizations:
+- `complete_2024_analysis_NO_SAMPLING.json`: Complete 2024 analysis
+- `complete_2025_analysis.json`: Complete 2025 analysis
+- Monthly breakdowns and stage-specific analyses
+- Visualization files and summary reports
 
 ---
 
-**Document Version**: 1.0  
+**Document Version**: 1.1  
 **Last Updated**: October 2025  
 **Author**: BERT Classifier Research Team
 
