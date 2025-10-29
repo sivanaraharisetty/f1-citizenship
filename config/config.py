@@ -32,20 +32,10 @@ class ProjectConfig:
     rare_event_threshold: float = 0.05  # 5% threshold for rare events
     
     # Text processing
-    max_text_length: int = 512  # BERT token limit
+    max_text_length: int = 512  # Maximum text length for processing
     min_text_length: int = 10
     remove_stopwords: bool = True
     handle_emojis: bool = True
-    
-    # BERT model configuration
-    model_name: str = "bert-base-uncased"  # Can be changed to distilbert, roberta, etc.
-    max_length: int = 512
-    batch_size: int = 16
-    learning_rate: float = 2e-5
-    num_epochs: int = 3
-    warmup_steps: int = 500
-    weight_decay: float = 0.01
-    gradient_accumulation_steps: int = 1
     
     # Classification labels
     labels: List[str] = None
