@@ -46,7 +46,10 @@ Discourse is analyzed across five visa stage categories:
 - **Storage**: Amazon S3 bucket
 - **Format**: JSON and Parquet files
 - **Time Period**: 2024-2025 (comprehensive analysis)
-- **Total Volume**: 7.7+ million records
+- **Total Volume**: 
+  - **2024**: 115,289,778 records (complete dataset, no sampling)
+  - **2025**: 77,073,526 records
+  - **Combined Total**: 192+ million records
 
 ### 2.2 Data Access
 
@@ -74,7 +77,7 @@ Data is collected from multiple visa-related subreddits including:
 
 ### 3.1 Stratified Sampling Approach
 
-Due to the large-scale nature of the dataset (7.7+ million records), a stratified sampling strategy is employed to ensure statistical representativeness while maintaining computational feasibility.
+Due to the large-scale nature of the dataset (192+ million records across 2024-2025), a stratified sampling strategy is employed to ensure statistical representativeness while maintaining computational feasibility. For comprehensive analyses, the complete dataset without sampling is processed: 115.3 million records for 2024 and 77.1 million records for 2025.
 
 #### 3.1.1 Sampling Parameters
 
