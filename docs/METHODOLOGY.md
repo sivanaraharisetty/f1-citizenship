@@ -755,27 +755,274 @@ For each label (fear, question, fear_driven_question, other):
 - **Real-Time Analysis**: Deploy for real-time monitoring
 - **External Validation**: Validate findings with other data sources
 
+## 14. Technical Stack and Tools
+
+### 14.1 Programming Language and Core Framework
+
+- **Python**: 3.8+ (primary programming language)
+- **Python Standard Library**: 
+  - `json`, `logging`, `datetime`, `pathlib`, `typing`, `re`, `collections`, `concurrent.futures`
+
+### 14.2 Deep Learning and Machine Learning
+
+#### 14.2.1 Deep Learning Framework
+- **PyTorch**: Primary deep learning framework
+  - `torch`: Core tensor operations
+  - `torch.nn`: Neural network modules
+  - `torch.utils.data`: Dataset and DataLoader classes
+  - CUDA support for GPU acceleration
+
+#### 14.2.2 Transformers Library
+- **Hugging Face Transformers**: Pre-trained BERT models
+  - `AutoTokenizer`: Tokenization for BERT models
+  - `AutoModel`: BERT model architectures
+  - `AutoConfig`: Model configuration
+  - `TrainingArguments`: Training configuration
+  - `Trainer`: Model training utilities
+  - `EarlyStoppingCallback`: Early stopping mechanism
+  - `get_linear_schedule_with_warmup`: Learning rate scheduling
+
+#### 14.2.3 Scikit-learn
+- **scikit-learn**: Machine learning utilities
+  - `train_test_split`: Data splitting
+  - `TfidfVectorizer`: Text vectorization
+  - `LogisticRegression`: Baseline classification
+  - `precision_recall_fscore_support`: Evaluation metrics
+  - `confusion_matrix`: Confusion matrix calculation
+  - `classification_report`: Classification metrics
+  - `roc_auc_score`: ROC-AUC calculation
+  - `average_precision_score`: Average precision
+  - `LinearRegression`: Trend analysis
+  - `StandardScaler`: Feature scaling
+
+### 14.3 Data Processing and Analysis
+
+#### 14.3.1 Data Manipulation
+- **Pandas**: Data manipulation and analysis
+  - DataFrames for structured data handling
+  - Time series analysis
+  - Data aggregation and grouping
+  - File I/O (CSV, Parquet, JSON)
+
+- **NumPy**: Numerical computing
+  - Array operations
+  - Mathematical functions
+  - Statistical operations
+
+#### 14.3.2 Statistical Analysis
+- **SciPy**: Scientific computing
+  - `stats`: Statistical functions (Mann-Whitney U test, etc.)
+  - Statistical hypothesis testing
+
+### 14.4 Natural Language Processing
+
+#### 14.4.1 NLTK (Natural Language Toolkit)
+- `nltk.corpus.stopwords`: English stopwords
+- `nltk.tokenize.word_tokenize`: Word tokenization
+- `nltk.stem.WordNetLemmatizer`: Word lemmatization
+- Data downloads: `punkt`, `stopwords`, `wordnet`, `omw-1.4`
+
+#### 14.4.2 spaCy
+- **spaCy**: Advanced NLP library
+  - `en_core_web_sm`: English language model
+  - Part-of-speech tagging
+  - Named entity recognition
+  - Dependency parsing
+
+#### 14.4.3 TextBlob
+- **TextBlob**: Text processing library
+  - Sentiment analysis
+  - Text normalization
+
+#### 14.4.4 Other NLP Tools
+- **emoji**: Emoji handling and conversion
+- **unicodedata**: Unicode normalization
+
+### 14.5 Cloud Infrastructure and Data Storage
+
+#### 14.5.1 AWS Services
+- **Amazon S3**: Data storage
+  - `boto3`: AWS SDK for Python
+  - `s3fs`: S3 filesystem interface
+  - Object storage for large datasets
+  - Year-based partitioning (`2024/`, `2025/`)
+
+#### 14.5.2 Data Formats
+- **Parquet**: Columnar storage format (via PyArrow)
+  - `pyarrow`: Apache Arrow Python bindings
+  - `pyarrow.parquet`: Parquet file I/O
+  - Efficient data serialization
+- **JSON**: Configuration and results storage
+- **CSV**: Data export and summaries
+
+### 14.6 Visualization and Reporting
+
+#### 14.6.1 Plotly
+- **Plotly**: Interactive visualizations
+  - `plotly.graph_objects`: Custom graphs
+  - `plotly.express`: High-level plotting
+  - `plotly.subplots`: Subplot creation
+  - `plotly.figure_factory`: Advanced figures
+  - `plotly.offline`: Offline plotting
+  - Interactive HTML dashboards
+
+#### 14.6.2 Matplotlib
+- **Matplotlib**: Static visualization
+  - `matplotlib.pyplot`: Plotting interface
+  - Publication-quality figures
+
+#### 14.6.3 Seaborn
+- **Seaborn**: Statistical visualization
+  - Statistical plotting
+  - Heatmaps
+  - Advanced plot styling
+
+#### 14.6.4 Other Visualization Tools
+- **WordCloud**: Word cloud generation
+- **NetworkX**: Network graph visualization
+
+### 14.7 Web Framework and User Interface
+
+#### 14.7.1 Streamlit
+- **Streamlit**: Interactive web applications
+  - Annotation interface
+  - Dashboard creation
+  - User interaction components
+
+#### 14.7.2 IPython/Jupyter (Optional)
+- **ipywidgets**: Interactive widgets
+- **IPython.display**: Display utilities
+
+### 14.8 Parallel Processing and Performance
+
+#### 14.8.1 Concurrent Processing
+- **concurrent.futures**: Parallel execution
+  - `ThreadPoolExecutor`: Multi-threaded execution
+  - `as_completed`: Future completion handling
+  - Parallel file processing
+
+#### 14.8.2 Progress Tracking
+- **tqdm**: Progress bars
+  - Iteration progress tracking
+  - Time estimation
+
+### 14.9 Configuration and Environment Management
+
+#### 14.9.1 Configuration Management
+- **YAML**: Configuration files (`config/*.yaml`)
+- **Python dataclasses**: Configuration classes
+- **Environment Variables**: AWS credentials and settings
+
+#### 14.9.2 Version Control
+- **Git**: Code version control
+- **GitHub**: Repository hosting
+
+### 14.10 Development and Deployment Tools
+
+#### 14.10.1 Build and Automation
+- **Makefile**: Build automation
+- **Bash Scripts**: Automation scripts
+  - `setup_env.sh`: Environment setup
+  - `run_pipeline.sh`: Pipeline execution
+  - `monitor.sh`: Process monitoring
+
+#### 14.10.2 Logging and Monitoring
+- **Python logging**: Comprehensive logging
+- **Custom monitoring scripts**: Process status tracking
+
+### 14.11 Data Validation and Quality
+
+#### 14.11.1 Type Checking
+- **Python typing**: Type hints for code clarity
+  - `Dict`, `List`, `Tuple`, `Optional`, `Any`
+
+#### 14.11.2 Error Handling
+- **Python warnings**: Warning management
+- **Exception handling**: Robust error handling
+
+### 14.12 Model Architecture Specifications
+
+#### 14.12.1 BERT Models
+- **bert-base-uncased**: Primary model (110M parameters)
+  - 12 transformer layers
+  - 12 attention heads per layer
+  - 768 hidden dimensions
+  - 512 maximum sequence length
+
+#### 14.12.2 Alternative Models (Configurable)
+- **DistilBERT**: Lightweight alternative
+- **RoBERTa**: Robustly optimized BERT
+
+### 14.13 Hardware Requirements
+
+#### 14.13.1 Compute Resources
+- **GPU**: CUDA-compatible GPU (optional, recommended)
+  - NVIDIA GPU with CUDA support
+  - GPU memory: 8GB+ recommended
+- **CPU**: Multi-core CPU for parallel processing
+- **RAM**: Sufficient memory for batch processing (16GB+ recommended)
+
+#### 14.13.2 Storage
+- **Local Storage**: For intermediate data and models
+- **Cloud Storage**: AWS S3 for raw data and results
+
+### 14.14 Software Environment
+
+#### 14.14.1 Operating System
+- **macOS**: Development environment (Darwin 25.0.0)
+- **Linux**: Production deployment (compatible)
+- **Shell**: Zsh/Bash for automation
+
+#### 14.14.2 Python Environment
+- **Virtual Environment**: Python venv
+- **Package Management**: pip
+- **Dependencies**: Pinned versions for reproducibility
+
+### 14.15 Third-Party APIs and Services
+
+#### 14.15.1 Data Sources
+- **Reddit API**: Social media data access
+- **AWS S3**: Cloud data storage
+
+### 14.16 Code Organization and Structure
+
+#### 14.16.1 Project Structure
+- **Modular Design**: Separate modules for each component
+- **Configuration Files**: Centralized configuration
+- **Scripts**: Automation and utility scripts
+- **Documentation**: Comprehensive documentation
+
+#### 14.16.2 Code Quality
+- **Docstrings**: Comprehensive function documentation
+- **Type Hints**: Type annotations throughout
+- **Logging**: Structured logging across modules
+
 ---
 
-## 14. References and Resources
+## 15. References and Resources
 
-### 14.1 Key Libraries
+### 15.1 Key Libraries
 
 - Hugging Face Transformers: BERT implementation
 - PyTorch: Deep learning framework
 - scikit-learn: Machine learning utilities
 - Pandas: Data manipulation
 - NLTK: Natural language processing
+- spaCy: Advanced NLP library
+- Plotly: Interactive visualizations
+- Matplotlib: Static visualizations
+- Seaborn: Statistical visualizations
 
-### 14.2 Data Sources
+### 15.2 Data Sources
 
 - Reddit API: Social media data
 - AWS S3: Data storage
 
-### 14.3 Model Resources
+### 15.3 Model Resources
 
 - BERT Paper: Devlin et al. (2019)
 - Multi-label Classification: Literature on multi-label methods
+- Hugging Face Model Hub: Pre-trained transformer models
 
 ---
 
