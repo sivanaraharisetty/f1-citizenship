@@ -1,16 +1,16 @@
 # Reddit Visa Discourse Analysis Pipeline
 
-A comprehensive BERT-based analysis pipeline for studying visa-related discourse patterns on Reddit, with focus on fear, Q&A, and fear-driven questions across different visa stages.
+A comprehensive analysis pipeline for studying visa-related discourse patterns on Reddit, with focus on fear, Q&A, and fear-driven questions across different visa stages.
 
 ## Overview
 
-This pipeline analyzes large-scale Reddit datasets to understand discourse patterns related to U.S. visa processes across stages (F1 → H1B+OPT → Green Card → Citizenship). It uses BERT-based models for multi-label classification and provides comprehensive analysis including temporal trends, policy impacts, and sentiment analysis.
+This pipeline analyzes large-scale Reddit datasets to understand discourse patterns related to U.S. visa processes across stages (F1 → H1B+OPT → Green Card → Citizenship). It uses keyword-based pattern matching for classification and provides comprehensive analysis including temporal trends and visa stage distributions.
 
 ## Features
 
 - **Stratified Sampling**: 1% sampling with oversampling for rare events
 - **Text Preprocessing**: Comprehensive cleaning, normalization, and tokenization
-- **BERT Classification**: Multi-label classification using Hugging Face Transformers
+- **Keyword-Based Classification**: Pattern matching for multi-label classification
 - **Temporal Analysis**: Pre/post policy change analysis and trend detection
 - **Interactive Visualizations**: Comprehensive dashboards and reports
 - **Evaluation Metrics**: Precision, recall, F1-score, confusion matrices
@@ -26,7 +26,7 @@ Project_Reddit_Analysis/
  descriptive_analysis/       # Keywords, topic clusters, distributions
  annotation/                # Labeled subset for classifier training
  classifier/                
-    models/                # Saved Hugging Face BERT models
+    models/                # Saved classification models
     predictions/           # Predicted labels
     metrics/               # Precision, recall, F1, confusion matrix
  pre_post_analysis/         # Temporal and policy change analysis
@@ -64,8 +64,8 @@ s3_prefix = "reddit-data/"
 sample_rate = 0.01  # 1% sampling
 min_samples_per_file = 100
 
-# BERT model configuration
-model_name = "bert-base-uncased"  # or distilbert, roberta
+# Classification model configuration
+model_name = "keyword-based"  # Pattern matching approach
 batch_size = 16
 learning_rate = 2e-5
 num_epochs = 3
@@ -110,8 +110,8 @@ python descriptive_analysis.py
 # Annotation system
 python annotation_system.py
 
-# BERT classifier training
-python bert_classifier.py
+# Classification training
+python src/classification/bert_classifier.py
 
 # Evaluation metrics
 python evaluation_metrics.py
@@ -147,9 +147,9 @@ python visualization_tools.py
 - Semi-automated batch annotation
 - Label validation and quality control
 
-### 5. BERT Classification
+### 5. Classification
+- Keyword-based pattern matching
 - Multi-label classification
-- Model training and validation
 - Prediction on full dataset
 
 ### 6. Evaluation Metrics
@@ -203,7 +203,7 @@ python visualization_tools.py
 - `exported_annotations.parquet`: Annotated subset
 
 ### Model Files
-- `classifier/models/`: Saved BERT models
+- `classifier/models/`: Saved classification models
 - `classifier/predictions/`: Model predictions
 - `classifier/metrics/`: Evaluation metrics
 
@@ -238,13 +238,12 @@ visa_stages = {
 ```
 
 ### Custom Model Configuration
-Modify BERT model parameters:
+Modify classification parameters:
 
 ```python
-model_name = "distilbert-base-uncased"  # or roberta-base
-batch_size = 32
-learning_rate = 3e-5
-num_epochs = 5
+# Keyword patterns can be customized in config files
+fear_keywords = ['afraid', 'scared', 'worried', ...]
+qa_keywords = ['?', 'how', 'what', ...]
 ```
 
 ## Troubleshooting
@@ -257,9 +256,9 @@ num_epochs = 5
    - Ensure bucket exists
 
 2. **Memory Issues**
-   - Reduce batch size
-   - Use smaller model (distilbert)
    - Process data in chunks
+   - Use parallel processing
+   - Optimize file reading
 
 3. **Annotation Issues**
    - Check annotation guidelines
@@ -312,6 +311,6 @@ For questions and support:
 
 ## Acknowledgments
 
-- Hugging Face Transformers library
 - Reddit API for data access
-- Community contributors and annotators
+- AWS for data infrastructure
+- Community contributors
