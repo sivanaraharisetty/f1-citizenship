@@ -1096,7 +1096,8 @@ See `results/` directory for detailed analysis results and visualizations:
 
 ---
 
-**Document Version**: 1.1  
+**Document Version**: 1.2  
 **Last Updated**: October 2025  
-**Author**: BERT Classifier Research Team
+**Author**: BERT Classifier Research Team  
+**Status**: Complete and Current
 
