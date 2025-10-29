@@ -1,10 +1,10 @@
 #!/bin/bash
 # Setup Environment Script
-# Sets up the development environment for the BERT Classifier project
+# Sets up the development environment for Reddit Visa Discourse Analysis
 
 set -e  # Exit on any error
 
-echo "Setting up BERT Classifier Environment..."
+echo "Setting up Reddit Visa Discourse Analysis Environment..."
 
 # Create virtual environment
 echo "Creating virtual environment..."
@@ -46,9 +46,8 @@ python -m spacy download en_core_web_sm || echo "spaCy model download failed (op
 
 # Verify installation
 echo "Verifying installation..."
-python -c "import torch; print(f'PyTorch version: {torch.__version__}')"
-python -c "import transformers; print(f'Transformers version: {transformers.__version__}')"
 python -c "import pandas; print(f'Pandas version: {pandas.__version__}')"
+python -c "import numpy; print(f'NumPy version: {numpy.__version__}')"
 
 echo "Environment setup complete!"
 echo "Next steps:"
