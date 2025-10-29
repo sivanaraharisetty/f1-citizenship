@@ -19,45 +19,8 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-MANIFEST
 
-# PyInstaller
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-.hypothesis/
-.pytest_cache/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IPython
-profile_default/
-ipython_config.py
-
-# pyenv
-.python-version
-
-# celery beat schedule file
-celerybeat-schedule
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
+# Virtual environments
 .env
 .venv
 env/
@@ -66,36 +29,11 @@ ENV/
 env.bak/
 venv.bak/
 
-# Spyder project settings
-.spyderproject
-.spyproject
-
-# Rope project settings
-.ropeproject
-
-# mkdocs documentation
-/site
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-.pyre/
-
-# Data files
-*.parquet
-*.csv
-*.json
-*.log
-*.tmp
-
-# Model files
-*.pkl
-*.joblib
-*.h5
-*.pb
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
 
 # IDE
 .vscode/
@@ -113,24 +51,30 @@ dmypy.json
 ehthumbs.db
 Thumbs.db
 
-# Project specific
-sampled_data/
-archive/interim_results/
-logs/
-models/
-results/
+# Data files (exclude from version control)
+*.parquet
+*.csv
+*.json
+*.log
+*.tmp
 
-# Keep important files
+# Model files
+*.pkl
+*.joblib
+*.h5
+*.pb
+
+# Project specific
+data/raw/
+data/interim/
+data/processed/
+logs/
+models/checkpoints/
+results/
+archive/
+
+# Keep config and essential files
+!config/**/*.yaml
+!config/**/*.py
 !README.md
 !requirements.txt
-!config.py
-!aws_config.py
-!main_pipeline.py
-!bert_classifier.py
-!data_sampling.py
-!annotation_system.py
-!temporal_analysis.py
-!visualization_tools.py
-!evaluation_metrics.py
-!descriptive_analysis.py
-!data_cleaning.py
