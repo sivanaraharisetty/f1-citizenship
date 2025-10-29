@@ -55,10 +55,11 @@ Discourse is analyzed across five visa stage categories:
 
 Data is accessed via AWS S3 with the following configuration:
 
-- **Bucket**: `coop-published-zone-298305347319`
-- **Prefix**: `arcticshift_reddit/`
+- **Bucket**: `[REDACTED]` (AWS S3 bucket name)
+- **Prefix**: `[REDACTED]` (data prefix path)
 - **File Structure**: Year-based partitioning (`2024/`, `2025/`)
 - **Access Method**: boto3 and s3fs libraries
+- **Authentication**: AWS credentials configured via environment variables
 
 ### 2.3 Subreddit Coverage
 
@@ -911,7 +912,7 @@ For each label (fear, question, fear_driven_question, other):
 #### 14.9.1 Configuration Management
 - **YAML**: Configuration files (`config/*.yaml`)
 - **Python dataclasses**: Configuration classes
-- **Environment Variables**: AWS credentials and settings
+- **Environment Variables**: AWS credentials and settings configured via environment variables (not hardcoded)
 
 #### 14.9.2 Version Control
 - **Git**: Code version control
