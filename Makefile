@@ -1,7 +1,7 @@
-# Makefile for Reddit Visa Discourse Analysis
+# Makefile for Reddit Visa Discourse Analysis Project
 # Professional CLI commands for reproducible workflows
 
-.PHONY: help setup analyze visualize clean test lint format
+.PHONY: help setup train analyze visualize clean test lint format
 
 # Default target
 help:
@@ -16,6 +16,11 @@ help:
 	@echo "  make sample         - Run data sampling"
 	@echo "  make clean-data     - Run data cleaning"
 	@echo "  make annotate       - Run annotation system"
+	@echo ""
+	@echo "Machine Learning:"
+	@echo "  make train          - Train classification model"
+	@echo "  make evaluate       - Evaluate model performance"
+	@echo "  make predict        - Run inference on new data"
 	@echo ""
 	@echo "Analysis:"
 	@echo "  make analyze        - Run temporal analysis"
@@ -56,6 +61,19 @@ clean-data:
 annotate:
 	@echo "Running annotation system..."
 	python src/preprocessing/annotation_system.py --config config/data_config.yaml
+
+# Machine Learning
+train:
+	@echo "Training classification model..."
+	python src/classification/bert_classifier.py --config config/model_config.yaml
+
+evaluate:
+	@echo "Evaluating model performance..."
+	python src/analysis/evaluation_metrics.py --config config/model_config.yaml
+
+predict:
+	@echo "Running inference..."
+	python src/classification/inference.py --config config/model_config.yaml
 
 # Analysis
 analyze:
@@ -104,7 +122,7 @@ clean-data:
 	rm -rf data/processed/*
 
 clean-models:
-	@echo "Cleaning model directories..."
+	@echo "Cleaning model checkpoints..."
 	rm -rf models/checkpoints/*
 	rm -rf models/tokenizer/*
 
@@ -112,7 +130,7 @@ clean-models:
 dev-setup: setup install
 	@echo "Development environment ready!"
 
-quick-test: sample clean-data analyze
+quick-test: sample clean-data train evaluate
 	@echo "Quick test pipeline completed!"
 
 full-test: pipeline
